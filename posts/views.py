@@ -20,11 +20,4 @@ def post_detail_view(request, post_id):
     post = Post.objects.get(id=post_id)
     return render(request, 'post_detail.html', context={'post': post})
 
-class PostListView(generics.ListAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-class PostDetailView(generics.RetrieveAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
 
