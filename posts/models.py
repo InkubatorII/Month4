@@ -7,9 +7,20 @@ Post.objects.all() - все объекты из таблицы
 Post.objects.filter(title='post') - все объекты по такому то фильтру
 
 Post.objects.get(id=1) - берет один объект по условию
+
 '''
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
 class Tag(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 class Post(models.Model):
     image = models.ImageField(null=True, blank=True)
@@ -18,6 +29,7 @@ class Post(models.Model):
     rate = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts', null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name='posts')
 
     def __str__(self):
@@ -27,3 +39,5 @@ class Comment(models.Model):
     text = models.CharField(max_length=256)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
 
+    def __str__(self):
+        return self.text

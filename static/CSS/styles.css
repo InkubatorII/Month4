@@ -1,0 +1,7 @@
+{% load static %}
+body {
+    background-image: url("{% static 'wallpaper2.jpg' %}");
+    background-size: cover; /* Масштабировать изображение */
+    background-position: center; /* Центрировать изображение */
+    background-repeat: no-repeat; /* Изображение не будет повторяться */
+}
