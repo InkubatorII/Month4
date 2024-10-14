@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from posts.models import Post
-from rest_framework import generics
-from posts.serializers import PostSerializer
 import random
 
 
