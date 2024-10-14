@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from posts.models import Post
+from rest_framework import generics
+from posts.serializers import PostSerializer
 import random
 
 
@@ -12,8 +14,17 @@ def main_page_view(request):
 
 def post_list_view(request):
     posts = Post.objects.all()
-    return render(request, 'post_list.html', {'posts': posts})
+    return render(request, 'post_list.html', context={'posts': posts})
 
 def post_detail_view(request, post_id):
     post = Post.objects.get(id=post_id)
-    return render(request, 'post_detail.html', {'post': post})
+    return render(request, 'post_detail.html', context={'post': post})
+
+class PostListView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+class PostDetailView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
