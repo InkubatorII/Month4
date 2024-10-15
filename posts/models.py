@@ -30,7 +30,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts', null=True, blank=True)
-    tags = models.ManyToManyField(Tag, related_name='posts')
+    tags = models.ManyToManyField(Tag, related_name='posts', null=True)
 
     def __str__(self):
         return self.title
