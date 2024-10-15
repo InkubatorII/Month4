@@ -2,7 +2,6 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from posts.models import Post
 from posts.forms import PostForm, PostForm2
-import random
 
 
 def test_view(request):
