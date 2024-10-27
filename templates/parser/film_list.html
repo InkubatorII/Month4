@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<center>
+{%for i in object_list%}
+    <div class="card" style="width: 18rem; margin: 30px; display: inline-block">
+    <div class="card-header">
+    {{ i.title }}
+    </div>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item">{{ i.genre }}</li>
+    <li class="list-group-item">{{ i.country }}</li>
+    <li class="list-group-item">{{ i.duration }}</li>
+    </ul>
+    </div>
+
+{% endfor %}
+
+</center>
+
+{% endblock %}

@@ -17,6 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from posts.views import (
+
+PostDetailView2,
+PostListView2,
+post_update_view,
 test_view,
 main_page_view,
 post_list_view,
@@ -25,6 +29,7 @@ post_create_view)
 from users.views import register_view, login_view, logout_view, profile_view
 from django.contrib.staticfiles.urls import static
 from django.conf import settings
+from parser.views import FilmListView, ParserView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +42,11 @@ urlpatterns = [
     path('login/', login_view),
     path('logout/', logout_view),
     path('profile/', profile_view),
+    path('posts/<int:post_id>/update/', post_update_view),
+    path('posts2/', PostListView2.as_view()),
+    path('posts2/<int:pk>/', PostDetailView2.as_view()),
+    path('start/', ParserView.as_view()),
+    path('films/', FilmListView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(
     settings.STATIC_URL, document_root=settings.STATICFILES_DIRS
 )

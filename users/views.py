@@ -51,7 +51,7 @@ def logout_view(request):
 def profile_view(request):
     if request.method == 'GET':
         posts = Post.objects.filter(author=request.user)
-        return render(request, 'users/profile.html')
+        return render(request, 'users/profile.html', context={'posts': posts})
 
 
 

@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from posts.models import Post
-from posts.forms import PostForm2, SearchForm
+from posts.models import Post, Comment
+from posts.forms import SearchForm, CommentForm, PostForm
 from django.db.models import Q
-
+from django.views.generic import ListView, DetailView
 '''
 posts = [post1, post2, post3, post4, post5, post6 , post7 , post8 , post9 , post10]
 limit = 2
@@ -54,27 +54,72 @@ def post_list_view(request):
 
         form = SearchForm()
         context={'posts': posts, 'form': form, 'max_pages': range(1, max_pages+1)}
-        return render(
-            request, 'posts/post_list.html',
-            context=context
-        )
+        return render(request, 'posts/post_list.html', context=context)
+
+class PostListView2(ListView):
+    model = Post
+    template_name = 'posts/post_list.html'
+    context_object_name = 'posts'
+
 
 @login_required(login_url='/login/')
 def post_detail_view(request, post_id):
+    post = Post.objects.get(id=post_id)
     if request.method == 'GET':
-        post = Post.objects.get(id=post_id)
-        return render(request, 'posts/post_detail.html', context={'post': post})
+        form = CommentForm()
+        comments = post.comments.all()
+        return render(request,
+                      'posts/post_detail.html',
+                      context={'post': post, 'form': form, 'comments': comments},
+        )
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if not form.is_valid():
+            return render(
+                request,
+                'posts/post_detail.html',
+                context={'post': post, 'form': form, 'comments': comments},
+            )
+        Comment.objects.create(text=form.cleaned_data['text'], post=post)
+        return redirect(f'/posts/{post.id}')
+
+class PostDetailView2(DetailView):
+    model = Post
+    template_name = 'posts/post_detail.html'
+    context_object_name = 'posts'
+    lookup_url_kwarg = 'post_id'
 
 @login_required(login_url='/login/')
 def post_create_view(request):
     if request.method == 'GET':
-        form = PostForm2()
+        form = PostForm ()
         return render(request, 'posts/post_create.html', context={'form': form})
     if request.method == 'POST':
-        form = PostForm2(request.POST, request.FILES)
+        form = PostForm(request.POST, request.FILES)
+        if not form.is_valid():
+            return render(request, 'posts/post_create.html', context={'form': form})
+        tags = form.cleaned_data.pop('tags')
+        post = Post.objects.create(author=request.user, **form.cleaned_data)
+        post.tags.set(tags)
+        post.save()
+        return redirect('/posts/')
+
+
+def post_update_view(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.method == 'GET':
+        form = PostForm2(instance=post)
+        return render(request, 'posts/post_update.html', context={'form': form})
+    if request.method == 'POST':
+        form = PostForm2(request.POST, request.FILES, instance=post)
         if not form.is_valid():
             return render(request, 'posts/post_create.html', context={'form': form})
         form.save()
-        return redirect('/posts/')
+        return redirect('/profile/')
+
+
+
+
 
 

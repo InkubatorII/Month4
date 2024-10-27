@@ -5,20 +5,36 @@
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card" style="width: 100%;">
                 {% if post.image %}
                     <img src="{{ post.image.url }}" class="card-img-top" alt="...">
                 {% else %}
                     <img src="{% static 'holder.jpg' %}" class="card-img-top" alt="Placeholder">
                 {% endif %}
-                <div class="card-body">
+                <a class="card-body">
                     <h5 class="card-title">{{ post.title }}</h5>
                     <p class="card-text">{{ post.content }}</p>
                     <p class="card-text">Rating: {{ post.rate }}</p>
+                    {% if post.author == request.user %}
+                    <a href="/posts/{{post.id}}/update/" class='btn btn-primary'>Edit</a>
+                    {% endif %}
+                <form action="/posts/{{post.id }}/" method="post">
+                 {% csrf_token %}
+                 {{ form.as_p }}
+                    <button type="submit">Comment</button>
+                 </form>
+                    {% for comment in comments %}
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ comment.text }}</h5>
+                        </div>
+                    </div>
+                {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
