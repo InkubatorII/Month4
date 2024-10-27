@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="content-section" style="display: flex; justify-content: center;">
+    <h1 class="title" id="site-title"> Profile</h1>
+
+    <div class="media">
+        <img style='height: 300px;' class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+        <div class="media-body">
+            <h2 class="account-heading">{{ user.username }}</h2>
+            <p class="text-secondary">{{ user.email }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
