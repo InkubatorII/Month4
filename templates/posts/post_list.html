@@ -1,8 +1,12 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 
 {% load static %}
 
 {% block content %}
+    <form action="/posts/" method="get">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+    </form>
 <div class="container">
     <div class="row justify-content-center">
         {% for post in posts %}
@@ -21,6 +25,21 @@
                 </div>
             </div>
         </div>
+        {% endfor %}
+    </div>
+
+    <div style='display:flex; justify-content:center; margin-top: 20px; margin-bottom: 20px;'>
+        {% for i in max_pages %}
+        {% if request.GET %}
+            {% if request.GET.page %}
+                <a class="btn btn-primary" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{i}}">{{i}}</a>
+                {% else %}
+                    <a class="btn btn-primary" href="?{{ request.GET.urlencode }}&page={{i}}">{{i}}</a>
+                {% endif %}
+            {% else %}
+                <a class="btn btn-primary" href="?page={{i}}">{{ i }}</a>
+            {% endif %}
+
         {% endfor %}
     </div>
 </div>
