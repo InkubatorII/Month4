@@ -105,7 +105,7 @@ def post_create_view(request):
         post.save()
         return redirect('/posts/')
 
-
+@login_required(login_url='/login/')
 def post_update_view(request, post_id):
     post = Post.objects.get(id=post_id)
     if request.method == 'GET':
